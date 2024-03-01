@@ -8,7 +8,9 @@ function Navbar() {
   let router = useRouter();
   const logout = () => {
     signOut(getAuth(firebase_app));
-    localStorage.clear();
+    if (typeof window !== 'undefined') {
+      localStorage.clear();
+    }
     router.replace('/admin')
   }
   return (

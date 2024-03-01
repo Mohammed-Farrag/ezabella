@@ -26,7 +26,9 @@ function page() {
       await signInWithEmailAndPassword(auth, data.email, data.password)
 
       user = getAuth().currentUser;
-      localStorage.setItem('user', JSON.stringify(user));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(user));
+      }
 
     } catch (err) {
       let errMsg = err.message;
