@@ -1,17 +1,16 @@
 'use client'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { auth, firebase_app } from '@/firbase/firebase';
-import React, { useEffect } from 'react'
+import { auth } from '@/firbase/firebase';
+import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from 'react-hot-toast';
-import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { isAuth } from './scripts';
 
 
 function page() {
 
   let router = useRouter();
+  const [loggedin, setLoggedin] = useState(false);
 
   const { register, handleSubmit, formState: { isValid, errors }, } = useForm({
     mode: 'onChange',
@@ -40,13 +39,13 @@ function page() {
 
   }
 
-  useEffect(() => {
 
-    if (isAuth()) {
-      console.log('logged')
-      redirect('/admin/articles')
-    }
+  useEffect(() => {
+    let user = JSON.parse(localStorage.getItem('user'))
+    if (user) router.replace('/admin/articles')
+
   }, [])
+
 
 
   return (

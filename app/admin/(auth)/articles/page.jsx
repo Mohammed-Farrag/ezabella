@@ -2,50 +2,52 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react';
 import { useForm } from 'react-hook-form';
-import { redirect } from 'next/navigation';
-import {firebase_app, auth} from '@/firbase/firebase';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { FaTruckPlane } from 'react-icons/fa6';
-import { isAuth } from '../scripts';
+import { useRouter } from 'next/navigation';
 
 
 function page() {
-
+   
+    let router = useRouter();
     const editorRef = useRef(null);
     const [content, setContent] = useState('');
+    
     const {
         register,
         handleSubmit,
         watch,
         reset,
         formState: { errors },
-      } = useForm()
-      const onSubmit = (data) => {
-        console.log({...data, content})
+    } = useForm()
+    const onSubmit = (data) => {
+        console.log({ ...data, content })
         setContent("")
-        reset({title:''})
-      }
+        reset({ title: '' })
+    }
 
 
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem('user'))
+        if (!user) router.replace('/admin')
+    }, [])
 
-    if(!isAuth()) return (redirect('/admin'))
+   
     return (
         <div className='flex flex-col items-end text-right w-full pt-10'>
             <div className="text-2xl text-default font-bold mb-4">المقالات</div>
 
-            <form  onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col gap-2' >
+            <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col gap-2' >
                 <div className="flex flex-col gap-1">
                     <label htmlFor="" className='font-bold'> العنوان/سؤال </label>
-                    <input type="text" {...register("title")}  className='w-full text-right px-3 rounded-md focus-within:border-default ' />
+                    <input type="text" {...register("title")} className='w-full text-right px-3 rounded-md focus-within:border-default ' />
                 </div>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="" className='font-bold'>  المحتوى/الإجابة </label>
                     <Editor
-                     
+
                         {...register("content")}
                         apiKey="jhn7wshkkju61z1jkqoqhypmpr0np8zenp1p9tspp0k03xik"
                         onInit={(evt, editor) => editorRef.current = editor}
-                        onEditorChange={(val) => setContent(val) }
+                        onEditorChange={(val) => setContent(val)}
                         init={{
                             height: 300,
                             menubar: false,

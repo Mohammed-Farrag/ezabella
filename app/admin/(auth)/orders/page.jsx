@@ -1,20 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import { PiTrashLight } from "react-icons/pi";
-import { BsUpload } from "react-icons/bs";
 import { IoCopy } from "react-icons/io5";
 import { IoCopyOutline } from "react-icons/io5";
 import toast, { Toaster } from 'react-hot-toast';
-import { getFirestore, doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
+import { getFirestore, doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 import { firebase_app } from '@/firbase/firebase';
-import { isAuth } from '../scripts';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 
 
 function page() {
-
-
+  let router = useRouter();
   const db = getFirestore(firebase_app);
   const [orders, setOrders] = useState([])
 
@@ -68,7 +65,11 @@ function page() {
   }, [])
 
 
-  if (!isAuth()) return (redirect('/admin'))
+
+  useEffect(() => {
+    let user = JSON.parse(localStorage.getItem('user'))
+    if (!user) router.replace('/admin')
+}, [])
   return (
     <div className='flex flex-col items-end text-right w-full pt-10'>
       <Toaster />
