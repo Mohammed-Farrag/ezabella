@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400&display=swap');
+
+@layer base {
+    input, textarea {
+      @apply focus-visible:outline-none rounded-md py-2 border-2 border-zinc-200 focus-visible:border-2 focus-visible:border-[#276DB8];
+    }
+  }
+
+
+.slick-prev {
+    left: 40% !important;
+    top: 98% !important;
+    z-index: 1;
+}
+
+.slick-next {
+    right: 40% !important;
+    top: 98% !important;
+    z-index: 1;
+}
+
+
+.slick-dots{
+    bottom: 0 !important;
+    z-index: 1;
+}
+
+
+.slick-dots li button::before{
+    width: 5px;
+    font-size: 20px !important;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #eee;
+}
+.slick-dots li.slick-active button::before,
+.slick-dots li:hover button::before{
+    color: #276DB8 !important;
+}
