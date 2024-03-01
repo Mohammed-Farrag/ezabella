@@ -41,8 +41,10 @@ function page() {
 
 
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user'))
-    if (user) router.replace('/admin/articles')
+    if (typeof window !== 'undefined') {
+      let user = JSON.parse(localStorage.getItem('user'))
+      if (user) router.replace('/admin/articles')
+    }
 
   }, [])
 

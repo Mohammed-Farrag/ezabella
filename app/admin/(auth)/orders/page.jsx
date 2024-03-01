@@ -67,8 +67,10 @@ function page() {
 
 
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user'))
-    if (!user) router.replace('/admin')
+    if (typeof window !== 'undefined') {
+      let user = JSON.parse(localStorage.getItem('user'))
+      if (!user) router.replace('/admin')
+    }
 }, [])
   return (
     <div className='flex flex-col items-end text-right w-full pt-10'>
