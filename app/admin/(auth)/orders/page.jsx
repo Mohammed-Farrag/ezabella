@@ -32,7 +32,6 @@ function page() {
 
 
   const deleteOrders = () => {
-    console.log(selectedOrders)
     for (let i = 0; i <= selectedOrders.length; i++) {
       console.log(selectedOrders[i]?.id);
       let docRef = doc(db, 'orders', selectedOrders[i]?.id);
@@ -41,6 +40,8 @@ function page() {
         position: 'top-center',
       }))
     }
+
+    router.refresh()
   }
 
 
