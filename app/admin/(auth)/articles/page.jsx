@@ -3,14 +3,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { firebase_app } from '@/firbase/firebase';
 
 
 function page() {
-   
+
     let router = useRouter();
     const editorRef = useRef(null);
     const [content, setContent] = useState('');
-    
+    const db = getFirestore(firebase_app);
+
+
     const {
         register,
         handleSubmit,
@@ -18,8 +22,20 @@ function page() {
         reset,
         formState: { errors },
     } = useForm()
+
     const onSubmit = (data) => {
-        console.log({ ...data, content })
+
+        let collRef = collection(db, 'articles');
+
+        addDoc(collRef, data).then(() => {
+
+            toast('created successfully', {
+                duration: 4000,
+                position: 'top-center',
+            })
+        })
+
+
         setContent("")
         reset({ title: '' })
     }
@@ -32,7 +48,7 @@ function page() {
         }
     }, [])
 
-   
+
     return (
         <div className='flex flex-col items-end text-right w-full pt-10'>
             <div className="text-2xl text-default font-bold mb-4">المقالات</div>
