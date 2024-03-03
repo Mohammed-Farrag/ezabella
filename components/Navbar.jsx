@@ -8,7 +8,7 @@ function Navbar() {
       <Link href="/contact">تواصل معنا</Link>
       <Link href="/videos">فيديوهات </Link>
       <Link href="/reviews">تجارب وأراء</Link>
-      {/* <Link href="/articles"> المقالات</Link> */}
+      <Link href="/articles"> المقالات</Link>
       <Link href="/">
         <Image src="/images/logo.png" width={100} height={80} alt="logo" />
       </Link>

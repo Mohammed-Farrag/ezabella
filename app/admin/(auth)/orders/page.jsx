@@ -33,8 +33,9 @@ function page() {
 
   const deleteOrders = () => {
     for (let i = 0; i <= selectedOrders.length; i++) {
-      console.log(selectedOrders[i]?.id);
+
       let docRef = doc(db, 'orders', selectedOrders[i]?.id);
+
       deleteDoc(docRef).then(() => toast('deleted successfully', {
         duration: 4000,
         position: 'top-center',
@@ -47,7 +48,7 @@ function page() {
 
   useEffect(() => {
     const returnData = async () => {
-      setDatafetched(true)
+
       const querySnapshot = await getDocs(collection(db, "orders"));
 
       let fetchedData = [];
@@ -72,7 +73,7 @@ function page() {
       let user = JSON.parse(localStorage.getItem('user'))
       if (!user) router.replace('/admin')
     }
-}, [])
+  }, [])
   return (
     <div className='flex flex-col items-end text-right w-full pt-10'>
       <Toaster />
@@ -81,7 +82,7 @@ function page() {
         <div className="flex gap-2 [&>*]:py-1 [&>*]:px-2 [&>*]:rounded-lg">
           <button
             onClick={deleteOrders}
-            className={`bg-red-600 text-white flex  gap-2 justify-between items-center ${selectedOrders.length == 0 ? 'cursor-not-allowed bg-opacity-45 ' : ''}`}
+            className={`bg-red-600  text-white flex  gap-2 justify-between items-center ${selectedOrders.length == 0 ? 'cursor-not-allowed bg-opacity-45 ' : ''}`}
           >
             حذف
             <PiTrashLight />
@@ -98,7 +99,7 @@ function page() {
 
 
 
-      <div className="flex flex-col gap-2 bg-white rounded-lg  text-black w-full mt-2  pt-5 px-5" style={{ direction: 'rtl' }}>
+      <div className="flex flex-col gap-2 bg-white rounded-lg  text-black w-full mt-2 max-h-[800px] overflow-y-scroll pt-5 px-5" style={{ direction: 'rtl' }}>
 
         {orders.map((order, idx) => (
           <div className="flex gap-2 py-3 border-b border-gray-500 last:border-b-0" key={idx}>

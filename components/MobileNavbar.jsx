@@ -31,7 +31,7 @@ function MobileNavbar() {
           <Link href="/services">الخدمات</Link>
           <Link href="/states"> الحالات</Link>
           <Link href="/hair-planting">عن زراعة الشعر</Link>
-          {/* <Link href="/articles"> المقالات</Link> */}
+          <Link href="/articles"> المقالات</Link>
           <Link href="/about-doctor">عن الدكتور </Link>
           <Link href="/contact">تواصل معنا</Link>
           <Link href="/videos">الفيديوهات</Link>

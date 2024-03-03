@@ -1,5 +1,7 @@
 "use client";
+import { db } from "@/firbase/firebase";
 import SuperHero from "@/shared/SuperHero";
+import { collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
@@ -7,19 +9,33 @@ import ReactPlayer from "react-player";
 
 function page() {
   const [hasWindow, setHasWindow] = useState(false);
+  const [dataFetched, setDatafetched] = useState(false);
+  const [videos, setVideos] = useState([])
 
-  const videos = [
-    { src: "https://youtu.be/3ivVutG1Mv4?si=e-TWUbFHvSj2Z4Sg" },
-    { src: "https://youtu.be/TFO65csHvqs?si=NAzYWNMWNDjYBPDW" },
-    { src: "https://youtu.be/kCoDLRzYrrk?si=3lfTD9uPYv--6ljM" },
-    { src: "https://youtu.be/3utUqF9YxtE?si=xH3Xxa20cfX6Nokb" },
-    { src: "https://youtu.be/1Dqql1SXins?si=JoB9Qho9sxQgjXxE" },
-    { src: "https://youtu.be/rSaov9BBTro?si=lU5ba3ceHrFuWeGP" },
-    { src: "https://youtu.be/vwIql7UW9os?si=tCkm18fkSIeHmO6g" },
-    { src: "https://youtu.be/akfHCYjdHOI?si=_QLtvSDAOtAQf-iV" },
-    { src: "https://youtu.be/3uksW-PVYsE?si=0UG7VHMGOQiN-Rgw" },
-  ];
-  //
+  
+  useEffect(() => {
+    const returnData = async () => {
+      setDatafetched(true)
+      const querySnapshot = await getDocs(collection(db, "videos"));
+      console.log(querySnapshot);
+
+      let fetchedData = [];
+      querySnapshot.forEach((doc) => {
+        fetchedData.push({ id: doc.id, ...doc.data() });
+      });
+
+      let filteredOrder = fetchedData.filter((item, idx, arr) => idx === arr.findIndex(v => v.id == item.id));
+      setVideos(() => [...filteredOrder]);
+      setDatafetched(true)
+    }
+
+    if (!dataFetched) {
+      returnData()
+    }
+  }, [])
+
+
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
