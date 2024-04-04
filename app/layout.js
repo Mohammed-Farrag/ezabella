@@ -2,6 +2,7 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import AppPager from "@/pages/appPerger";
+import 'react-quill/dist/quill.snow.css'
 
 const inter = Cairo({ subsets: ["arabic"] });
 //

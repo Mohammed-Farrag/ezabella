@@ -1,16 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import {
-    Editor,
-    EditorProvider,
-    Toolbar,
-    BtnBold,
-    BtnBulletList,
-    BtnClearFormatting,
-    BtnItalic,
-    BtnLink,
-    BtnStyles
-} from 'react-simple-wysiwyg';
+import dynamic from 'next/dynamic'
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore } from 'firebase/firestore';
@@ -18,15 +8,61 @@ import { firebase_app } from '@/firbase/firebase';
 import toast, { Toaster } from 'react-hot-toast';
 import { PiTrashLight } from "react-icons/pi";
 
-function page() {
 
+
+
+
+const QuillNoSSRWrapper = dynamic(async () => {
+    
+    const { default: RQ } = await import('react-quill')
+    return ({ forwardedRef, ...props }) => <RQ ref={forwardedRef} {...props} />
+}, {
+    ssr: false,
+    loading: () => <p>Loading ...</p>,
+})
+
+
+function page() {
+    
     let router = useRouter();
+    
     const [content, setContent] = useState('');
     const [articles, setArticles] = useState([]);
     const [selectedArticles, setSelectedArticles] = useState([]);
     const db = getFirestore(firebase_app);
     const [dataFetched, setDatafetched] = useState(false);
+    
+    const modules = {
+        toolbar: [
+            [{ size: [] }],
+            ['bold', 'italic', 'strike'],
+            [
+                { list: 'ordered' },
+                { list: 'bullet' },
+                { indent: '-1' },
+                { indent: '+1' },
+            ],
+            ['link', 'image']
+        ],
+        clipboard: {
+            matchVisual: false,
+        },
+    }
+    const formats = [
+        'size',
+        'bold',
+        'italic',
+        'strike',
+        'list',
+        'bullet',
+        'indent',
+        'link',
+        'image',
+    ]
+    
 
+
+   
     const {
         register,
         handleSubmit,
@@ -67,7 +103,7 @@ function page() {
         for (let i = 0; i <= selectedArticles.length; i++) {
 
             let docRef = doc(db, 'articles', selectedArticles[i]?.id);
-            
+
             deleteDoc(docRef).then(() => toast('deleted successfully', {
                 duration: 4000,
                 position: 'top-center',
@@ -108,7 +144,7 @@ function page() {
 
 
     return (
-        <div className='flex flex-col items-end text-right w-full pt-10'>
+        <div className='flex flex-col items-end text-right w-full pt-10 overflow-x-hidden'>
             <Toaster />
 
             <div className="flex w-full justify-between [&>*]:px-2 [&>*]:rounded-lg">
@@ -147,24 +183,17 @@ function page() {
                 </div>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="" className='font-bold'>  المحتوى/الإجابة </label>
-                    <EditorProvider>
-
-                        <Editor
-                            className='bg-white'
-                            containerProps={{ style: { backgroundColor: '#fff' } }}
-                            value={content}
-                            onChange={(val) => setContent(val.target.value)} >
-                            <Toolbar>
-                                <BtnBold />
-                                <BtnBulletList />
-                                <BtnClearFormatting />
-                                <BtnItalic />
-                                <BtnLink />
-                                <BtnStyles />
-                            </Toolbar>
-                        </Editor>
-                    </EditorProvider>
-                    <button type='submit' className='my-5 py-2 bg-default rounded-md text-white font-bold text-center'>نشر</button>
+                   
+            
+                    <QuillNoSSRWrapper 
+                        className="bg-white" 
+                        value={content}  
+                        onChange={(val) => setContent(val)}  
+                        modules={modules} 
+                        formats={formats} 
+                        theme="snow" 
+                    />
+                    <button type='submit' className='mb-5 mt-20 py-2 bg-default rounded-md text-white font-bold text-center'>نشر</button>
                 </div>
 
             </form>

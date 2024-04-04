@@ -42,3 +42,14 @@
 .slick-dots li:hover button::before{
     color: #276DB8 !important;
 }
+
+.ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg{
+    display: none;
+}
+.ql-toolbar{
+    text-align: left;
+}
+
+.ql-container{
+    background-color: #fff;
+}
